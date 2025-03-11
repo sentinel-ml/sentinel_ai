@@ -49,5 +49,17 @@ def index():
     return {'message': 'Sentinel ML Model'}
 
 @app.post('/predict', methods=['POST'])
-def predict(data):
-    
+def predict(transaction: TransactionData):
+    try:
+        input_data = pd.DataFrame([transaction.dict()])
+
+        prediction = model.predict(input_data[0])
+        probability = model.predict_proba(input_data)[0][1]
+
+        return {
+            "fraud_detected": bool(prediction),
+            "fraud_prediction": float(probability),
+            "transaction_details": transaction.dict()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction Error: {e}")
