@@ -1,4 +1,4 @@
-from fastapi import FastApi, HTTPException
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pandas as pd
 import numpy as np
@@ -8,7 +8,7 @@ import os
 with open('/model/sentinel_0.0.1.pkl', 'rb') as f:
     model = pickle.load(f)
 
-app = FastApi(title="Financial Fraud Detection API")
+app = FastAPI(title="Financial Fraud Detection API")
 
 class TransactionData(BaseModel):
     distance_from_home: float
@@ -18,6 +18,19 @@ class TransactionData(BaseModel):
     used_chip: float
     used_pin_number: float
     online_order: float
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "distance_from_home": 57.878,
+                "distance_from_last_transaction": 0.311,
+                "ratio_to_median_purchase_price": 1.946,
+                "repeat_retailer": 1.0,
+                "used_chip": 1.0,
+                "used_pin_number": 0.0,
+                "online_order": 0.0
+            }
+        }
 
 @app.get('/', methods=['GET'])
 def index():
