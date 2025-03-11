@@ -32,6 +32,18 @@ class TransactionData(BaseModel):
             }
         }
 
+@app.on_event("startup")
+def load_model():
+    global model
+    model_path = os.path.join(os.path.dirname(__file__), "model/sentinel_0.0.1.pkl")
+    try:
+        with open(model_path, 'rb') as f:
+            model = pickle.load(f)
+        print('Model loaded successfully!')
+    except Exception as e:
+        print(f"Error loading model: {e}")
+        raise RuntimeError(f"Failed to load model: {e}")
+
 @app.get('/', methods=['GET'])
 def index():
     return {'message': 'Sentinel ML Model'}
