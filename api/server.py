@@ -83,3 +83,7 @@ def predict_batch(transactions: list[TransactionData]):
         return results
     except Exception as e:
         raise HTTPException(status_code=500, detail=F"Batch prediction error: {str(e)}")
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "model_loaded": "model" in globals()}
