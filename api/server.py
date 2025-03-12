@@ -7,6 +7,8 @@ import numpy as np
 import pickle
 import os
 
+model_path = os.path.join(os.path.dirname(__file__), "model/sentinel_0.0.1.pkl")
+
 with open('../model/sentinel_0.0.1.pkl', 'rb') as f:
     model = pickle.load(f)
 
@@ -46,11 +48,11 @@ def load_model():
         print(f"Error loading model: {e}")
         raise RuntimeError(f"Failed to load model: {e}")
 
-@app.get('/', methods=['GET'])
+@app.get('/')
 def index():
     return {'message': 'Sentinel ML Model'}
 
-@app.post('/predict', methods=['POST'])
+@app.post('/predict')
 def predict(transaction: TransactionData):
     try:
         input_data = pd.DataFrame([transaction.dict()])
