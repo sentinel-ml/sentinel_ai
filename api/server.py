@@ -63,3 +63,23 @@ def predict(transaction: TransactionData):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction Error: {e}")
+
+@app.post('predict_batch')
+def predict_batch(transactions: list[TransactionData]):
+    try:
+        input_data = pd.DataFrame([t.dict for t in transactions])
+
+        predictions = model.predict(input_data)
+        probabilities = model.predict_proba(input_data)[:, 1]
+
+        results = []
+        for i, transaction in enumerate(transactions):
+            results.append({
+                "fraud_detected": bool(predictions[i]),
+                "fraud_probability": float(probabilities[i]),
+                "transaction_details": transaction.dict()
+            })
+        
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=F"Batch prediction error: {str(e)}")
