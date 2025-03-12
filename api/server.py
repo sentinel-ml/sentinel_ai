@@ -7,7 +7,7 @@ import numpy as np
 import pickle
 import os
 
-model_path = os.path.join(os.path.dirname(__file__), "..", "model/sentinel_0.0.1.pkl")
+model_path = os.path.join(os.path.dirname(__file__), "model/sentinel_0.0.1.pkl")
 
 with open(model_path, 'rb') as f:
     model = pickle.load(f)
