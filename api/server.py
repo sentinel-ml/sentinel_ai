@@ -5,7 +5,7 @@ import numpy as np
 import pickle
 import os
 
-with open('./model/sentinel_0.0.1.pkl', 'rb') as f:
+with open('../model/sentinel_0.0.1.pkl', 'rb') as f:
     model = pickle.load(f)
 
 app = FastAPI(title="Financial Fraud Detection API")
