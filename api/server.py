@@ -7,9 +7,9 @@ import numpy as np
 import pickle
 import os
 
-model_path = os.path.join(os.path.dirname(__file__), "model/sentinel_0.0.1.pkl")
+model_path = os.path.join(os.path.dirname(__file__), "..", "model/sentinel_0.0.1.pkl")
 
-with open('../model/sentinel_0.0.1.pkl', 'rb') as f:
+with open(model_path, 'rb') as f:
     model = pickle.load(f)
 
 app = FastAPI(title="Financial Fraud Detection API")
@@ -39,7 +39,6 @@ class TransactionData(BaseModel):
 @app.on_event("startup")
 def load_model():
     global model
-    model_path = os.path.join(os.path.dirname(__file__), "model/sentinel_0.0.1.pkl")
     try:
         with open(model_path, 'rb') as f:
             model = pickle.load(f)
@@ -57,7 +56,7 @@ def predict(transaction: TransactionData):
     try:
         input_data = pd.DataFrame([transaction.dict()])
 
-        prediction = model.predict(input_data[0])
+        prediction = model.predict(input_data)[0]
         probability = model.predict_proba(input_data)[0][1]
 
         return {
